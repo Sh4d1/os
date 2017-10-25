@@ -39,7 +39,7 @@ pub unsafe fn init() {
     IDT[30].set_func(security_handler);
     
     IDT[32].set_func(pit);
-
+    IDT[33].set_func(keyboard);
     dtables::lidt(&IDTR);
     
 }

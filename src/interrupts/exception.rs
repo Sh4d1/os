@@ -71,7 +71,6 @@ interrupt_error!(stack_segment_handler, stack, {
 interrupt_error!(protection_handler, stack, {
     println!("Protection fault");
     stack.dump();
-    loop {}
 });
 
 bitflags! {

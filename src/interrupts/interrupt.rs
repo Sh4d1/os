@@ -1,5 +1,23 @@
 use device::pic;
+use device::io;
 use time;
+
+unsafe fn trigger(irq: u8) {
+    if irq < 16 {
+        if irq >= 8 {
+            pic::SLAVE.set_mask(irq - 8);
+            pic::MASTER.ack();
+            pic::SLAVE.ack();
+        } else {
+            //pic::MASTER.set_mask(irq);
+            pic::MASTER.ack();
+            println!("Heeeey");
+
+            io::Io::new(0x60).read();
+        }
+    }
+}
+
 
 interrupt!(pit, {
     const PIT_RATE: u64 = 2250286;
@@ -21,4 +39,6 @@ interrupt!(pit, {
     pic::MASTER.ack();
 });
 
-
+interrupt!(keyboard, {
+    trigger(1);
+});
