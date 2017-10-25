@@ -4,10 +4,10 @@ iso := build/os-$(arch).iso
 target ?= $(arch)-os
 rust_os := target/$(target)/debug/libos.a
 
-linker_script := src/arch/$(arch)/linker.ld
-grub_cfg := src/arch/$(arch)/grub.cfg
-assembly_source_files := $(wildcard src/arch/$(arch)/*.asm)
-assembly_object_files := $(patsubst src/arch/$(arch)/%.asm, \
+linker_script := bootloader/$(arch)/linker.ld
+grub_cfg := bootloader/$(arch)/grub.cfg
+assembly_source_files := $(wildcard bootloader/$(arch)/*.asm)
+assembly_object_files := $(patsubst bootloader/$(arch)/%.asm, \
 	build/arch/$(arch)/%.o, $(assembly_source_files))
 
 .PHONY: all clean run iso kernel
@@ -43,6 +43,6 @@ kernel:
 	@xargo build --target $(target)
 
 # compile assembly files
-build/arch/$(arch)/%.o: src/arch/$(arch)/%.asm
+build/arch/$(arch)/%.o: bootloader/$(arch)/%.asm
 	@mkdir -p $(shell dirname $@)
 	@nasm -felf64 $< -o $@
